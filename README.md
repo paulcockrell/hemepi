@@ -22,7 +22,8 @@ You MUST reboot after setting this option
 
 ### API key
 
-Visit and register with <XXX> and get an API key
+Register with [goldapi](https://www.goldapi.io) and get an API key. They offer
+a limited free API key.
 
 ## Development
 
@@ -43,7 +44,8 @@ make build
 
 ## Deploying
 
-The Makefile has a command for deploying, modify the target device user and host as required
+The Makefile has a command for deploying, modify the target device user and
+host as required.
 ```
 make deploy
 ```
