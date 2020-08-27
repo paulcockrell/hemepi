@@ -25,7 +25,7 @@ var (
 	borderColor = inky.Black
 )
 
-func draw() error {
+func render(imgPath string) error {
 	flag.Var(&model, "model", "Inky model (PHAT or WHAT)")
 	flag.Var(&modelColor, "model-color", "Inky model color (black, red or yellow)")
 	flag.Var(&borderColor, "border-color", "Border color( black, white, red or yellow")
