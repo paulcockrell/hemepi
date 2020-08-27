@@ -12,6 +12,8 @@ import (
 
 // NewInky constructs new Inky display device after attempting to setup hardware
 func NewInky(spiPort, dcPin, resetPin, busyPin *string, opts *inky.Opts) (*inky.Dev, error) {
+	log.Println("Setting up display...")
+
 	if _, err := host.Init(); err != nil {
 		return nil, err
 	}
@@ -38,7 +40,6 @@ func NewInky(spiPort, dcPin, resetPin, busyPin *string, opts *inky.Opts) (*inky.
 		return nil, fmt.Errorf("invalid Busy pin name: %s", *busyPin)
 	}
 
-	log.Printf("Creating inky...")
 	dev, err := inky.New(b, dc, reset, busy, opts)
 	if err != nil {
 		return nil, err

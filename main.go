@@ -30,7 +30,7 @@ var (
 )
 
 func main() {
-	fmt.Println("HeMePI - [HE]vy [ME]tal Raspberry [PI] Gold and Silver price tracker ")
+	fmt.Print("HeMePI - [HE]vy [ME]tal Raspberry [PI] Gold and Silver price tracker\n\n")
 
 	flag.Var(&metal, "metal", "Metal to get price for")
 	flag.Var(&currency, "currency", "Currency to get metal price in")
@@ -72,7 +72,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	display.DrawAll(*img)
+	if err = display.DrawAll(*img); err != nil {
+		log.Fatal(err)
+	}
 
-	fmt.Println("Thankyou for using HeMePi.")
+	log.Print("\n\nThankyou for using HeMePi.\n")
 }
