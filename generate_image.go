@@ -13,11 +13,11 @@ import (
 
 var (
 	fontfile         = "./assets/luxisr.ttf"
-	height           = 212
-	width            = 104
+	height           = 104
+	width            = 212
 	dpi      float64 = 72
-	fontSize float64 = 12
-	spacing          = 1.5
+	fontSize float64 = 10
+	spacing          = 1.0
 
 	black = color.RGBA{0, 0, 0, 0xff}
 	white = color.RGBA{0xff, 0xff, 0xff, 0xff}
@@ -28,10 +28,9 @@ func generateImage(data *Response) (*image.Image, error) {
 
 	// Just put some text together for now
 	var text = []string{}
-	text = append(text, fmt.Sprintf("Metal: %s", data.Metal))
-	text = append(text, fmt.Sprintf("Currency: %s", data.Currency))
-	text = append(text, fmt.Sprintf("Low price: %.2f", data.LowPrice))
-	text = append(text, fmt.Sprintf("High price: %.2f", data.HighPrice))
+	text = append(text, fmt.Sprintf("Metal: %s, Currency: %s", data.Metal, data.Currency))
+	text = append(text, fmt.Sprintf("Low: %.2f, High: %.2f", data.LowPrice, data.HighPrice))
+	text = append(text, fmt.Sprintf("Ask: %.2f, Bid: %.2f", data.Ask, data.Bid))
 
 	// Read the font data
 	fontBytes, err := ioutil.ReadFile(fontfile)
