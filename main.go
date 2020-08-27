@@ -28,6 +28,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	err = generateImage()
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	// For now just dump data to terminal
 	fmt.Println(data)
 }
