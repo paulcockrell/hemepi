@@ -56,12 +56,12 @@ You can also copy the binary to a suitable location on your RPI, e.g:
 scp hemepi pi@raspberrypi.local:/usr/local/bin
 ```
 
-## Running
+## Usage
 
 Execute the binary, passing in at least the mandatory api key flag as follows:
 
 ```
-sudo hemepi --api=<api.key.here>
+sudo ./hemepi -metal=XAU -currency=GBP -apikey=<my.api.key>
 ```
 
 You have various configuration flags to alter the connection to the display or
