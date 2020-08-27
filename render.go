@@ -3,9 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"image/png"
+	"image"
 	"log"
-	"os"
 
 	"periph.io/x/periph/conn/gpio/gpioreg"
 	"periph.io/x/periph/conn/spi/spireg"
@@ -14,8 +13,7 @@ import (
 )
 
 var (
-	spiPort  = flag.String("spi", "spidev0.0", "Name or number of SPI port to open")
-	path     = flag.String("image", "", "Path to a png file to display on the inky")
+	spiPort  = flag.String("spi", "/dev/spidev0.0", "Name or number of SPI port to open")
 	dcPin    = flag.String("dc", "22", "Inky DC pin")
 	resetPin = flag.String("reset", "27", "Inky reset pin")
 	busyPin  = flag.String("busy", "17", "Inky busy pin")
@@ -25,23 +23,13 @@ var (
 	borderColor = inky.Black
 )
 
-func render(imgPath string) error {
+func render(img *image.Image) error {
+	fmt.Println("Rendering image on display...")
+
 	flag.Var(&model, "model", "Inky model (PHAT or WHAT)")
 	flag.Var(&modelColor, "model-color", "Inky model color (black, red or yellow)")
 	flag.Var(&borderColor, "border-color", "Border color( black, white, red or yellow")
 	flag.Parse()
-
-	// Open and decode the image
-	f, err := os.Open(*path)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	img, err := png.Decode(f)
-	if err != nil {
-		return err
-	}
 
 	if _, err := host.Init(); err != nil {
 		return err
@@ -80,5 +68,5 @@ func render(imgPath string) error {
 	}
 
 	log.Printf("Drawing image...")
-	return dev.DrawAll(img)
+	return dev.DrawAll(*img)
 }

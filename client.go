@@ -54,6 +54,8 @@ func (gc GoldapiClient) buildReq() (*http.Request, error) {
 }
 
 func (gc GoldapiClient) get() (*Response, error) {
+	fmt.Println(fmt.Sprintf("Getting data from %q...", gc.url()))
+
 	req, err := gc.buildReq()
 	if err != nil {
 		return &Response{}, err

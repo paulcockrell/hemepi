@@ -1,14 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"image"
 	"image/color"
 	"image/draw"
-	"image/png"
 	"io/ioutil"
-	"os"
 
 	"github.com/golang/freetype"
 	"golang.org/x/image/font"
@@ -26,29 +23,25 @@ var (
 	white = color.RGBA{0xff, 0xff, 0xff, 0xff}
 )
 
-var text = []string{
-	"Hello, Bob",
-	"Hello, Moss",
-	"Hello, Paul",
-}
+func generateImage(data *Response) (*image.Image, error) {
+	fmt.Println("Generating image...")
 
-//func generateImage(data *Response, name string) error {
-func generateImage() error {
-	/*
-		upLeft := image.Point{0, 0}
-		lowRight := image.Point{width, height}
-		img := image.NewRGBA(image.Rectangle{upLeft, lowRight})
-	*/
+	// Just put some text together for now
+	var text = []string{}
+	text = append(text, fmt.Sprintf("Metal: %s", data.Metal))
+	text = append(text, fmt.Sprintf("Currency: %s", data.Currency))
+	text = append(text, fmt.Sprintf("Low price: %.2f", data.LowPrice))
+	text = append(text, fmt.Sprintf("High price: %.2f", data.HighPrice))
 
 	// Read the font data
 	fontBytes, err := ioutil.ReadFile(fontfile)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	f, err := freetype.ParseFont(fontBytes)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// Initialize the context
@@ -76,28 +69,12 @@ func generateImage() error {
 	for _, s := range text {
 		_, err := c.DrawString(s, pt)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		pt.Y += c.PointToFixed(fontSize * spacing)
 	}
 
-	// Save RGBA image to disk
-	outFile, err := os.Create("out.png")
-	if err != nil {
-		return err
-	}
-	defer outFile.Close()
+	img := rgba.SubImage(rgba.Rect)
 
-	b := bufio.NewWriter(outFile)
-	err = png.Encode(b, rgba)
-	if err != nil {
-		return err
-	}
-	err = b.Flush()
-	if err != nil {
-		return err
-	}
-
-	fmt.Println("Image generated to file 'out.png'")
-	return nil
+	return &img, nil
 }

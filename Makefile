@@ -5,3 +5,4 @@ build:
 
 deploy:
 	scp ./hemepi pi@raspberrypi.local:~/Development
+	scp -r ./assets pi@raspberrypi.local:~/Development

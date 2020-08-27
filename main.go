@@ -17,10 +17,16 @@ var (
 )
 
 func main() {
+	fmt.Println("HeMePi - Heavy Metal PI")
+
 	flag.Var(&metal, "metal", "Metal to get price for")
 	flag.Var(&currency, "currency", "Currency to get metal price in")
 
 	flag.Parse()
+
+	if *apiKey == "" {
+		log.Fatalf("apikey must set, obtain one from goldapi.io")
+	}
 
 	client := NewGoldapiClient(baseURL, *apiKey, metal, currency)
 	data, err := client.get()
@@ -28,11 +34,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = generateImage()
+	img, err := generateImage(data)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 
-	// For now just dump data to terminal
-	fmt.Println(data)
+	err = render(img)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Thankyou for using HeMePi.")
 }
