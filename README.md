@@ -61,11 +61,26 @@ scp hemepi pi@raspberrypi.local:/usr/local/bin
 Execute the binary, passing in at least the mandatory api key flag as follows:
 
 ```
-sudo ./hemepi -metal=XAU -currency=GBP -apikey=<my.api.key>
+sudo ./hemepi -metal=XAU -currency=GBP -apikey=<your.api.key>
 ```
 
 You have various configuration flags to alter the connection to the display or
 the frequency data is collected from the external API
+
+## Automatically running
+
+You can setup a cronjob so that the program will run at set times/intervals. The following example will get Gold every even minute, and Silver every odd minute. If you do this you must make sure your Goldapi.io account type has the required request limits.
+
+To edit your cron type the following:
+```
+crontab -e
+```
+
+Add the following for switching between Gold and Silver every minute
+```
+*/2 * * * * sudo $HOME/hemepi/hemepi -metal=XAG -currency=GBP -apikey=<your.api.key>
+1-59/2 * * * * sudo $HOME/hemepi/hemepi -metal=XAU -currency=GBP -apikey=<your.api.key>
+```
 
 ## Licences
 
