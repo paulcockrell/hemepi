@@ -1,7 +1,7 @@
 # [HE]avy [ME]tals Raspberry [PI] - Hemepi
 
 Precious Metals prices tracker with Raspberry Pi + InkyPhat epaper display
-![](./hemepi.jpg)
+![](./hemepi.jpeg)
 
 ## Prerequisits
 
