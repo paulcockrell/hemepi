@@ -4,5 +4,5 @@ build:
 	GOOS=linux GOARCH=arm go build -o hemepi ./...
 
 deploy:
-	scp ./hemepi pi@raspberrypi.local:~/Development
-	scp -r ./assets pi@raspberrypi.local:~/Development
+	rsync -r ./hemepi pi@raspberrypi.local:~/hemepi/
+	rsync -r ./assets pi@raspberrypi.local:~/hemepi/
