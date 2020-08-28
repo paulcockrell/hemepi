@@ -80,7 +80,7 @@ func (gc GoldapiClient) get() (*Response, error) {
 
 // Response defines the data returned from a successful goldapi query
 type Response struct {
-	Timestamp      uint    `json:"timestamp"`
+	Timestamp      int64   `json:"timestamp"`
 	Metal          string  `json:"metal"`
 	Currency       string  `json:"currency"`
 	Exchange       string  `json:"exchange"`
@@ -89,7 +89,7 @@ type Response struct {
 	OpenPrice      float32 `json:"open_price"`
 	LowPrice       float32 `json:"low_price"`
 	HighPrice      float32 `json:"high_price"`
-	OpenTime       uint    `json:"open_time"`
+	OpenTime       int64   `json:"open_time"`
 	Price          float32 `json:"price"`
 	Ch             float32 `json:"ch"`
 	Chp            float32 `json:"chp"`
