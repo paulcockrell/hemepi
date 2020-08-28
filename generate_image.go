@@ -18,7 +18,6 @@ import (
 )
 
 var (
-	fontfile         = "./assets/Verdana.ttf"
 	width            = 212
 	height           = 104
 	upLeft           = image.Point{0, 0}

@@ -1,7 +1,7 @@
 # [HE]avy [ME]tals Raspberry [PI] - Hemepi
 
-Raspberry Pi + InkyPhat epaper display the heavy metals Gold and Silver daily prices
-Built using [periph](https://periph.io/)
+Precious Metals prices tracker with Raspberry Pi + InkyPhat epaper display
+![](./hemepi.jpg)
 
 ## Prerequisits
 
@@ -71,9 +71,9 @@ the frequency data is collected from the external API
 
 You can setup a cronjob so that the program will run at set times/intervals. The following example will get Gold every even minute, and Silver every odd minute. If you do this you must make sure your Goldapi.io account type has the required request limits.
 
-To edit your cron type the following:
+To edit your cron type the following (must be run as sudo)
 ```
-crontab -e
+sudo crontab -e
 ```
 
 Add the following for switching between Gold and Silver every minute
