@@ -78,8 +78,8 @@ sudo crontab -e
 
 Add the following for switching between Gold and Silver every minute
 ```
-*/2 * * * * sudo $HOME/hemepi/hemepi -metal=XAG -currency=GBP -apikey=<your.api.key>
-1-59/2 * * * * sudo $HOME/hemepi/hemepi -metal=XAU -currency=GBP -apikey=<your.api.key>
+*/2 * * * * /home/pi/hemepi/hemepi -metal=XAG -currency=GBP -apikey=<your.api.key>
+1-59/2 * * * * /home/pi/hemepi/hemepi -metal=XAU -currency=GBP -apikey=<your.api.key>
 ```
 
 ## Licences
