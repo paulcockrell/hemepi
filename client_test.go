@@ -119,27 +119,106 @@ func TestGoldapiClient_InvalidRequest(t *testing.T) {
 	}
 }
 
-func assertEqual(t *testing.T, got, want string) {
-	t.Helper()
-	if got != want {
-		t.Errorf("got %q want %q", got, want)
-	}
+func TestMetal(t *testing.T) {
+	t.Run("valid metal codes", func(t *testing.T) {
+		cases := []struct {
+			name, metalCode string
+			metal           Metal
+		}{
+			{name: "'XAU' translates to Gold constant", metalCode: "XAU", metal: Gold},
+			{name: "'XAG' translates to Silver constant", metalCode: "XAG", metal: Silver},
+			{name: "'XPT' translates to Platinum constant", metalCode: "XPT", metal: Platinum},
+			{name: "'XPD' translates to Palladium constant", metalCode: "XPD", metal: Palladium},
+		}
+
+		for _, test := range cases {
+			t.Run(test.name, func(t *testing.T) {
+				var m Metal
+				m.Set(test.metalCode)
+				if m != test.metal {
+					t.Errorf("got %d want %d", m, test.metal)
+				}
+				if m.String() != test.metalCode {
+					t.Errorf("got %q want %q", m.String(), test.metalCode)
+				}
+			})
+		}
+	})
+
+	t.Run("invalid metal codes", func(t *testing.T) {
+		invalidMetalCode := "XXX"
+		var m Metal
+		err := m.Set(invalidMetalCode)
+		if err == nil {
+			t.Errorf("Expected an error for invalid metal code %q", invalidMetalCode)
+		}
+	})
+
+	t.Run("invalid metal value", func(t *testing.T) {
+		var m Metal = 99
+		got := m.String()
+		want := fmt.Sprintf("unknown metal code: %d", m)
+		if got != want {
+			t.Errorf("got %q want %q", got, want)
+		}
+	})
 }
 
-var mockResponse = &Response{
-	Timestamp:      1598525693,
-	Metal:          "XAU",
-	Currency:       "USD",
-	Exchange:       "FOREXCOM",
-	Symbol:         "FOREXCOM:XAUUSD",
-	PrevClosePrice: 1954.27,
-	OpenPrice:      1954.27,
-	LowPrice:       1937.04,
-	HighPrice:      1955.8,
-	OpenTime:       1598475600,
-	Price:          1939.11,
-	Ch:             -15.16,
-	Chp:            -0.78,
-	Ask:            1939.56,
-	Bid:            1938.83,
+func TestCurrency(t *testing.T) {
+	t.Run("valid currency codes", func(t *testing.T) {
+		cases := []struct {
+			name, currencyCode string
+			currency           Currency
+		}{
+			{name: "'USD' translates to USD constant", currencyCode: "USD", currency: USD},
+			{name: "'AUD' translates to AUD constant", currencyCode: "AUD", currency: AUD},
+			{name: "'GBP' translates to GBP constant", currencyCode: "GBP", currency: GBP},
+			{name: "'EUR' translates to EUR constant", currencyCode: "EUR", currency: EUR},
+			{name: "'CHF' translates to CHF constant", currencyCode: "CHF", currency: CHF},
+			{name: "'CAD' translates to CHF constant", currencyCode: "CAD", currency: CAD},
+			{name: "'JPY' translates to JPY constant", currencyCode: "JPY", currency: JPY},
+			{name: "'INR' translates to INR constant", currencyCode: "INR", currency: INR},
+			{name: "'SGD' translates to SGD constant", currencyCode: "SGD", currency: SGD},
+			{name: "'BTC' translates to BTC constant", currencyCode: "BTC", currency: BTC},
+			{name: "'CZK' translates to CZK constant", currencyCode: "CZK", currency: CZK},
+			{name: "'RUB' translates to RUB constant", currencyCode: "RUB", currency: RUB},
+			{name: "'PLN' translates to PLN constant", currencyCode: "PLN", currency: PLN},
+			{name: "'MYR' translates to MYR constant", currencyCode: "MYR", currency: MYR},
+			{name: "'XAG' translates to XAG constant", currencyCode: "XAG", currency: XAG},
+		}
+
+		for _, test := range cases {
+			t.Run(test.name, func(t *testing.T) {
+				var c Currency
+				err := c.Set(test.currencyCode)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if c != test.currency {
+					t.Errorf("got %d want %d", c, test.currency)
+				}
+				if c.String() != test.currencyCode {
+					t.Errorf("got %q want %q", c.String(), test.currencyCode)
+				}
+			})
+		}
+	})
+
+	t.Run("invalid currency codes", func(t *testing.T) {
+		invalidCurrencyCode := "XXX"
+		var c Currency
+		err := c.Set(invalidCurrencyCode)
+		if err == nil {
+			t.Errorf("Expected an error for invalid currency code %q", invalidCurrencyCode)
+		}
+	})
+
+	t.Run("invalid currency value", func(t *testing.T) {
+		var c Currency = 99
+		got := c.String()
+		want := fmt.Sprintf("unknown currency code: %d", c)
+		if got != want {
+			t.Errorf("got %q want %q", got, want)
+		}
+	})
 }

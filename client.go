@@ -68,10 +68,6 @@ func (gc GoldapiClient) get() (*Response, error) {
 		return &Response{}, err
 	}
 
-	if resp.StatusCode >= 500 {
-		return &Response{}, errors.New(fmt.Sprintf("Error contacting endpoint: %s", gc.url()))
-	}
-
 	respData, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return &Response{}, err
@@ -129,7 +125,7 @@ func (m Metal) String() string {
 	case Palladium:
 		return "XPD"
 	default:
-		return "unknown"
+		return fmt.Sprintf("unknown metal code: %d", m)
 	}
 }
 
@@ -206,7 +202,7 @@ func (c Currency) String() string {
 	case XAG:
 		return "XAG"
 	default:
-		return "unknown currency code %q"
+		return fmt.Sprintf("unknown currency code: %d", c)
 	}
 }
 

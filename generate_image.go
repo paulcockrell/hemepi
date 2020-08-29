@@ -48,13 +48,7 @@ func generateImage(data *Response) (*image.Image, error) {
 	draw.Draw(rgba, rgba.Bounds(), *baseImage, image.Point{0, 0}, draw.Over)
 
 	// Setup font context
-	c := freetype.NewContext()
-	c.SetDPI(dpi)
-	c.SetFontSize(fontSize)
-	c.SetFont(font)
-	c.SetClip(rgba.Bounds())
-	c.SetDst(rgba)
-	c.SetSrc(image.Black)
+	fCtx := newFontContext(rgba)
 
 	// Convert raw data object to display text
 	lines := BuildLines(data)
@@ -62,10 +56,11 @@ func generateImage(data *Response) (*image.Image, error) {
 		return nil, err
 	}
 
+	fCtx.SetFont(font)
 	for _, line := range lines {
-		c.SetFontSize(line.fontSize)
+		fCtx.SetFontSize(line.fontSize)
 		pt := freetype.Pt(line.x, line.y)
-		_, err = c.DrawString(line.text, pt)
+		_, err = fCtx.DrawString(line.text, pt)
 		if err != nil {
 			return nil, err
 		}
@@ -80,6 +75,16 @@ func generateImage(data *Response) (*image.Image, error) {
 	subImg := mirrorImg.SubImage(mirrorImg.Rect)
 
 	return &subImg, nil
+}
+
+func newFontContext(destImg *image.RGBA) *freetype.Context {
+	c := freetype.NewContext()
+	c.SetDPI(dpi)
+	c.SetClip(destImg.Bounds())
+	c.SetDst(destImg)
+	c.SetSrc(image.Black)
+
+	return c
 }
 
 func assetPath() (string, error) {
