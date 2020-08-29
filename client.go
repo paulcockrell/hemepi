@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -67,6 +68,10 @@ func (gc GoldapiClient) get() (*Response, error) {
 		return &Response{}, err
 	}
 
+	if resp.StatusCode >= 500 {
+		return &Response{}, errors.New(fmt.Sprintf("Error contacting endpoint: %s", gc.url()))
+	}
+
 	respData, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return &Response{}, err
@@ -74,6 +79,10 @@ func (gc GoldapiClient) get() (*Response, error) {
 
 	var respObj Response
 	json.Unmarshal(respData, &respObj)
+
+	if respObj.Error != "" {
+		return &Response{}, errors.New(respObj.Error)
+	}
 
 	return &respObj, nil
 }
@@ -95,6 +104,7 @@ type Response struct {
 	Chp            float32 `json:"chp"`
 	Ask            float32 `json:"ask"`
 	Bid            float32 `json:"bid"`
+	Error          string  `json:"error"`
 }
 
 // Metal is used to define the metal selected in the currency pair

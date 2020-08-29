@@ -25,9 +25,7 @@ func TestGoldapiClient(t *testing.T) {
 		got := client.url()
 		want := fmt.Sprintf("%s/%s/%s/", url, metal, currency)
 
-		if got != want {
-			t.Errorf("got %q want %q", got, want)
-		}
+		assertEqual(t, got, want)
 	})
 
 	t.Run("request has correct headers set", func(t *testing.T) {
@@ -42,11 +40,12 @@ func TestGoldapiClient(t *testing.T) {
 		if got != want {
 			t.Errorf("got %q want %q", got, want)
 		}
+		assertEqual(t, got, want)
 	})
 }
 
 func TestGoldapiClient_Integration(t *testing.T) {
-	t.Run("successfull response returns populated Response object", func(t *testing.T) {
+	t.Run("valid api key returns successfull response", func(t *testing.T) {
 		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			data, err := json.Marshal(mockResponse)
 			if err != nil {
@@ -74,6 +73,46 @@ func TestGoldapiClient_Integration(t *testing.T) {
 			t.Fatalf("got %v want %v", got, want)
 		}
 	})
+
+	t.Run("invalid api key returns error", func(t *testing.T) {
+		errorText := "Invalid API Key"
+
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			errResponse := map[string]string{
+				"error": errorText,
+			}
+			data, err := json.Marshal(errResponse)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			w.WriteHeader(http.StatusForbidden)
+
+			fmt.Fprintln(w, string(data))
+		}))
+		defer ts.Close()
+
+		client := NewGoldapiClient(
+			ts.URL,
+			"badapiKey",
+			Gold,
+			GBP,
+		)
+
+		_, err := client.get()
+		if err == nil {
+			t.Fatalf("Expected an error to be returned")
+		}
+
+		assertEqual(t, err.Error(), errorText)
+	})
+}
+
+func assertEqual(t *testing.T, got, want string) {
+	t.Helper()
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
+	}
 }
 
 var mockResponse = &Response{
