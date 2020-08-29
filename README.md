@@ -69,17 +69,21 @@ the frequency data is collected from the external API
 
 ## Automatically running
 
-You can setup a cronjob so that the program will run at set times/intervals. The following example will get Gold every even minute, and Silver every odd minute. If you do this you must make sure your Goldapi.io account type has the required request limits.
+You can setup a cronjob so that the program will run at set times/intervals.
+The following example will get Gold every even minute, and Silver every odd
+minute. If you do this you must make sure your Goldapi.io account type has the
+required request limits.
 
 To edit your cron type the following (must be run as sudo)
 ```
 sudo crontab -e
 ```
 
-Add the following for switching between Gold and Silver every minute
+Add the following for switching between Gold and Silver every 30 minutes weekdays
+only (metal markets close over the weekend)
 ```
-*/2 * * * * /home/pi/hemepi/hemepi -metal=XAG -currency=GBP -apikey=<your.api.key>
-1-59/2 * * * * /home/pi/hemepi/hemepi -metal=XAU -currency=GBP -apikey=<your.api.key>
+0 * * * 1-5 /home/pi/hemepi/hemepi -metal=XAG -currency=GBP -apikey=<your.api.key>
+30 * * * 1-5 /home/pi/hemepi/hemepi -metal=XAU -currency=GBP -apikey=<your.api.key>
 ```
 
 ## Licences
