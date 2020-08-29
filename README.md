@@ -3,7 +3,7 @@
 Precious Metals prices tracker with Raspberry Pi + InkyPhat epaper display
 ![](./hemepi.jpeg)
 
-## Prerequisits
+## Prerequisites
 
 ### Hardware
 
