@@ -44,8 +44,8 @@ func TestGoldapiClient(t *testing.T) {
 	})
 }
 
-func TestGoldapiClient_Integration(t *testing.T) {
-	t.Run("valid api key returns successfull response", func(t *testing.T) {
+func TestGoldapiClient_ValidRequest(t *testing.T) {
+	t.Run("valid request returns successfull response", func(t *testing.T) {
 		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			data, err := json.Marshal(mockResponse)
 			if err != nil {
@@ -73,39 +73,50 @@ func TestGoldapiClient_Integration(t *testing.T) {
 			t.Fatalf("got %v want %v", got, want)
 		}
 	})
+}
 
-	t.Run("invalid api key returns error", func(t *testing.T) {
-		errorText := "Invalid API Key"
+func TestGoldapiClient_InvalidRequest(t *testing.T) {
+	cases := []struct {
+		name, errorText string
+		code            int
+	}{
+		{name: "Invalid curency pair", code: http.StatusOK, errorText: "No data available for this request"},
+		{name: "Invalid api key", code: http.StatusForbidden, errorText: "Invalid API Key"},
+		{name: "No api key", code: http.StatusForbidden, errorText: "No API Key provided"},
+	}
 
-		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			errResponse := map[string]string{
-				"error": errorText,
+	for _, test := range cases {
+		t.Run(test.name, func(t *testing.T) {
+			ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				errResponse := map[string]string{
+					"error": test.errorText,
+				}
+				data, err := json.Marshal(errResponse)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				w.WriteHeader(test.code)
+
+				fmt.Fprintln(w, string(data))
+			}))
+			defer ts.Close()
+
+			client := NewGoldapiClient(
+				ts.URL,
+				"apiKey",
+				Gold,
+				GBP,
+			)
+
+			_, err := client.get()
+			if err == nil {
+				t.Fatalf("Expected an error to be returned")
 			}
-			data, err := json.Marshal(errResponse)
-			if err != nil {
-				t.Fatal(err)
-			}
 
-			w.WriteHeader(http.StatusForbidden)
-
-			fmt.Fprintln(w, string(data))
-		}))
-		defer ts.Close()
-
-		client := NewGoldapiClient(
-			ts.URL,
-			"badapiKey",
-			Gold,
-			GBP,
-		)
-
-		_, err := client.get()
-		if err == nil {
-			t.Fatalf("Expected an error to be returned")
-		}
-
-		assertEqual(t, err.Error(), errorText)
-	})
+			assertEqual(t, err.Error(), test.errorText)
+		})
+	}
 }
 
 func assertEqual(t *testing.T, got, want string) {
