@@ -86,6 +86,6 @@ only (metal markets close over the weekend)
 30 * * * 1-5 /home/pi/hemepi/hemepi -metal=XAU -currency=GBP -apikey=<your.api.key>
 ```
 
-## Licences
+## License
 
-Periph is carries the following [license](https://github.com/google/periph/blob/master/LICENSE)
+This project is licensed under the terms of the GNU General Public License v3.0.
