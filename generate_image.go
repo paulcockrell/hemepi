@@ -172,9 +172,9 @@ func BuildLines(data *Response) []Line {
 	// Price change from previous close price
 	difference := data.Price - data.PrevClosePrice
 	percentage := (difference / data.PrevClosePrice) * 100
-	sign := "+"
-	if data.Price < data.PrevClosePrice {
-		sign = "-"
+	sign := ""
+	if data.Price > data.PrevClosePrice {
+		sign = "+"
 	}
 	percentChange := Line{
 		fontSize: 18,
