@@ -67,6 +67,31 @@ sudo ./hemepi -metal=XAU -currency=GBP -apikey=<your.api.key>
 You have various configuration flags to alter the connection to the display or
 the frequency data is collected from the external API
 
+```
+HeMePI - [HE]vy [ME]tal Raspberry [PI] Gold and Silver price tracker
+
+Usage of ./hemepi:
+  -apikey string
+    	API key for goldapi.io
+  -currency value
+    	Currency to get metal price in
+  -metal value
+    	Metal to get price for
+  -model value
+    	Inky model (PHAT or WHAT)
+  -model-color value
+    	Inky model color (black, red or yellow) (default red)
+  -reset string
+    	Inky reset pin (default "27")
+  -spi string
+    	Name or number of SPI port to open (default "/dev/spidev0.0")
+  -dc string
+    	Inky DC pin (default "22")
+  -busy string
+    	Inky busy pin (default "17")
+  -border-color value
+    	Border color( black, white, red or yellow
+```
 ## Automatically running
 
 You can setup a cronjob so that the program will run at set times/intervals.
